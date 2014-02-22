@@ -6,14 +6,11 @@
 package eu.mihosoft.fx.tutorials.milkglass;
 
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Background;
@@ -22,6 +19,7 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.transform.Scale;
 import jfxtras.labs.util.event.MouseControlUtil;
 
@@ -29,7 +27,7 @@ import jfxtras.labs.util.event.MouseControlUtil;
  *
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
-public class MilkGlassPane extends Pane {
+public class MilkGlassPane extends Region {
 
     // circle container
     private final Pane container;
@@ -40,11 +38,7 @@ public class MilkGlassPane extends Pane {
 
     // background image
     private WritableImage image;
-    
-    
-    // <editor-fold defaultstate="collapsed" desc="Zom/Lense Effect">
-    private double scale = 1;
-    // </editor-fold>
+
 
     public MilkGlassPane(Pane container) {
 
@@ -52,7 +46,7 @@ public class MilkGlassPane extends Pane {
         // set the blur and color adjust effects
         blur = new BoxBlur(initialBlur, initialBlur, 3);
         setEffect(blur);
-        blur.setInput(new ColorAdjust(0, 0, 0.4, 0));
+        blur.setInput(new ColorAdjust(0, 0, 0.4, 0.0));
 
         // circle container
         this.container = container;
@@ -68,31 +62,6 @@ public class MilkGlassPane extends Pane {
 
         timer.start();
 
-        // <editor-fold defaultstate="collapsed" desc=" Dragging Behavior ">
-        MouseControlUtil.makeDraggable(this);
-
-        addEventHandler(MouseEvent.MOUSE_PRESSED, (MouseEvent t) -> {
-            setManaged(false);
-        });
-        addEventHandler(MouseEvent.MOUSE_RELEASED, (MouseEvent t) -> {
-            setManaged(true);
-            updateBackground();
-        });
-        // </editor-fold>
-
-        // <editor-fold defaultstate="collapsed" desc="Scroll Zoom Behavior ">
-        addEventHandler(ScrollEvent.SCROLL, (ScrollEvent t) -> {
-            scale += t.getDeltaY() * 0.0025;
-            if (scale > 5) {
-                scale = 5;
-            } else if (scale < 1) {
-                scale = 1;
-            }
-
-            blur.setWidth(Math.min(initialBlur * scale, 30));
-            blur.setHeight(Math.min(initialBlur * scale, 30));
-        });
-        // </editor-fold>
     }
 
     /**
@@ -137,13 +106,6 @@ public class MilkGlassPane extends Pane {
                 getWidth(),
                 getHeight());
         sp.setViewport(rect);
-
-        // <editor-fold defaultstate="collapsed" desc="Lense/Zoom Effect">
-        Scale scaleT = new Scale(scale, scale, 1);
-        scaleT.setPivotX(container.getWidth() / 2);
-        scaleT.setPivotY(container.getHeight() / 2);
-        sp.setTransform(scaleT);
-        // </editor-fold>
 
         // create the snaphot
         container.snapshot(sp, image);

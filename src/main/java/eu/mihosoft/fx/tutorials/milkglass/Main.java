@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- * Milk Glass Demo.
+ * Java FX Milk Glass Demo.
  * 
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
