@@ -21,7 +21,6 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.transform.Scale;
-import jfxtras.labs.util.event.MouseControlUtil;
 
 /**
  *
